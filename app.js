@@ -2,6 +2,7 @@ const express       = require('express');
 const cookieSession = require('cookie-session');
 const path          = require('path');
 const fs            = require('fs');
+require('ejs'); // explicit require so bundlers include it (Express loads it dynamically)
 
 require('./database'); // init DB + seed admin
 const store = require('./datastore');
