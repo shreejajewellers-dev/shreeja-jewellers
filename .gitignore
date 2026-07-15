@@ -4,3 +4,4 @@ server.log
 server.err
 *.log
 data/tmp/
+ProductDetails/

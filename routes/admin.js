@@ -74,7 +74,7 @@ router.post('/login', redirectIfAuth, (req, res) => {
   res.render('admin/login', { title: 'Admin Login', error: 'Invalid username or password' });
 });
 
-router.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/admin/login'); });
+router.get('/logout', (req, res) => { req.session = null; res.redirect('/admin/login'); });
 
 /* ── Dashboard ────────────────────────────────────────────────────────────── */
 router.get('/dashboard', requireAuth, (req, res) => {
