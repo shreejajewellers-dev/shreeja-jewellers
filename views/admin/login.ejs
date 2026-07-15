@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="login-body">
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <img src="/images/logo.png" alt="Shreeja Jewellers">
+      </div>
+      <h1>Admin Panel</h1>
+      <p class="login-sub">Shreeja Jewellers Management</p>
+
+      <% if (error) { %>
+      <div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= error %></div>
+      <% } %>
+
+      <form method="POST" action="/admin/login">
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> Username</label>
+          <input type="text" name="username" placeholder="Enter username" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-lock"></i> Password</label>
+          <input type="password" name="password" placeholder="Enter password" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn-admin-primary btn-block">
+          <i class="fas fa-sign-in-alt"></i> Sign In
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Website</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

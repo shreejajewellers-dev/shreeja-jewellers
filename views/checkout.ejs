@@ -1,0 +1,197 @@
+<%- include('partials/header', { title, cartCount }) %>
+
+<div class="page-banner">
+  <div class="container">
+    <h1 class="page-title"><i class="fas fa-paper-plane"></i> Place Enquiry</h1>
+    <p class="page-sub">Fill in your details and we'll get back to you shortly</p>
+  </div>
+</div>
+
+<section class="checkout-section">
+  <div class="container">
+    <div class="checkout-layout">
+      <!-- Form -->
+      <div class="checkout-form-wrap">
+        <h2 class="section-label">Your Contact Details</h2>
+        <% if (error) { %>
+          <div class="form-error"><i class="fas fa-exclamation-circle"></i> <%= error %></div>
+        <% } %>
+        <form method="POST" action="/checkout" class="checkout-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="customer_name">Full Name <span class="req">*</span></label>
+              <input type="text" id="customer_name" name="customer_name" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+              <label for="customer_phone">Phone Number <span class="req">*</span></label>
+              <input type="tel" id="customer_phone" name="customer_phone"
+                     placeholder="10-digit mobile number"
+                     maxlength="10" inputmode="numeric"
+                     pattern="[0-9]{10}" autocomplete="tel" required>
+              <span class="phone-hint" id="phone-hint"></span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="customer_email">Email Address <span class="opt">(Optional)</span></label>
+            <input type="email" id="customer_email" name="customer_email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label for="message">Message / Special Requirements <span class="opt">(Optional)</span></label>
+            <textarea id="message" name="message" rows="4" placeholder="Any specific requirements, size, customization requests..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i> Send Enquiry & Open WhatsApp
+          </button>
+          <p class="form-disclaimer">
+            <i class="fas fa-lock"></i> Your information is safe with us. We'll never share it with third parties.
+          </p>
+        </form>
+      </div>
+
+      <!-- Order summary -->
+      <div class="order-summary-wrap">
+        <h2 class="section-label">Order Summary</h2>
+        <div class="order-items">
+          <% cart.forEach(item => { %>
+            <div class="order-item">
+              <div class="oi-image">
+                <% if (item.image) { %>
+                  <img src="<%= item.image %>" alt="<%= item.name %>">
+                <% } else { %>
+                  <div class="oi-no-img"><i class="fas fa-gem"></i></div>
+                <% } %>
+              </div>
+              <div class="oi-info">
+                <span class="oi-cat badge-<%= item.category %>"><%= item.category %></span>
+                <p class="oi-name"><%= item.name %></p>
+                <% if (item.purity || item.weight > 0) { %>
+                  <p class="oi-specs">
+                    <% if (item.purity) { %><%= item.purity %><% } %>
+                    <% if (item.purity && item.weight > 0) { %> · <% } %>
+                    <% if (item.weight > 0) { %><%= item.weight %> <%= item.weight_unit %><% } %>
+                  </p>
+                <% } %>
+              </div>
+              <div class="oi-price">₹<%= Number(item.price).toLocaleString('en-IN') %></div>
+            </div>
+          <% }) %>
+        </div>
+        <div class="order-total">
+          <span>Total Enquiry Value</span>
+          <span class="total-gold">₹<%= Number(total).toLocaleString('en-IN') %></span>
+        </div>
+        <div class="what-happens">
+          <h4><i class="fas fa-question-circle"></i> What happens next?</h4>
+          <ol>
+            <li>Your enquiry is sent to our team via email</li>
+            <li>WhatsApp opens with your order pre-filled</li>
+            <li>Our team confirms availability & price</li>
+            <li>You can visit our store or arrange delivery</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.page-banner { background: linear-gradient(135deg, #110e00, #000); padding: 60px 0 40px; text-align: center; border-bottom: 1px solid var(--border); }
+.page-title  { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 8px; }
+.page-sub    { color: var(--muted); }
+.checkout-section { padding: 60px 0 80px; }
+.checkout-layout  { display: grid; grid-template-columns: 1fr 380px; gap: 40px; align-items: start; }
+.section-label    { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); margin-bottom: 24px; }
+.form-error  { background: rgba(229,62,62,.1); border: 1px solid rgba(229,62,62,.3); color: #fc8181; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: .9rem; }
+.checkout-form { display: flex; flex-direction: column; gap: 20px; }
+.form-row    { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group  { display: flex; flex-direction: column; gap: 8px; }
+.form-group label { font-size: .85rem; color: var(--muted); font-weight: 600; letter-spacing: .5px; }
+.req   { color: var(--gold); }
+.opt   { color: #555; font-weight: 400; }
+.form-group input, .form-group textarea {
+  background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 16px; color: var(--text); font-size: .95rem; font-family: inherit;
+  transition: border-color .2s, box-shadow .2s; width: 100%; box-sizing: border-box;
+}
+.form-group input:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,.1);
+}
+.form-group textarea { resize: vertical; min-height: 100px; }
+.btn-submit  { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #000; border: none; padding: 16px 32px; border-radius: 8px; font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: opacity .2s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.btn-submit:hover { opacity: .85; }
+.form-disclaimer { text-align: center; font-size: .8rem; color: var(--muted); margin: 0; }
+.order-summary-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+.order-items { margin-bottom: 20px; }
+.order-item  { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.oi-image img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; }
+.oi-no-img   { width: 56px; height: 56px; border-radius: 6px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--border); }
+.oi-cat      { font-size: .65rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; display: inline-block; margin-bottom: 4px; }
+.badge-gold    { background: rgba(212,175,55,.15); color: var(--gold); }
+.badge-diamond { background: rgba(155,184,212,.15); color: var(--diamond); }
+.badge-silver  { background: rgba(184,184,184,.15); color: var(--silver); }
+.oi-name     { font-size: .9rem; font-weight: 600; color: var(--text); margin: 0 0 4px; }
+.oi-specs    { font-size: .75rem; color: var(--muted); margin: 0; }
+.oi-price    { font-size: .95rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.order-total { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-top: 1px solid var(--gold-dark); font-weight: 700; margin-top: 8px; }
+.total-gold  { font-size: 1.3rem; color: var(--gold); }
+.what-happens { background: rgba(212,175,55,.05); border: 1px solid rgba(212,175,55,.15); border-radius: 8px; padding: 20px; margin-top: 20px; }
+.what-happens h4 { color: var(--gold); font-size: .9rem; margin-bottom: 12px; }
+.what-happens ol { padding-left: 20px; margin: 0; }
+.what-happens li { color: var(--muted); font-size: .85rem; margin-bottom: 8px; line-height: 1.4; }
+@media (max-width: 900px) {
+  .checkout-layout { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+.phone-hint { font-size: .78rem; min-height: 16px; margin-top: 2px; }
+.phone-hint.ok  { color: #48bb78; }
+.phone-hint.err { color: #fc8181; }
+input.phone-invalid { border-color: #e53e3e !important; box-shadow: 0 0 0 3px rgba(229,62,62,.12) !important; }
+input.phone-valid   { border-color: #48bb78 !important; box-shadow: 0 0 0 3px rgba(72,187,120,.10) !important; }
+</style>
+
+<script>
+(function () {
+  var inp  = document.getElementById('customer_phone');
+  var hint = document.getElementById('phone-hint');
+
+  inp.addEventListener('input', function () {
+    // Strip everything that is not a digit
+    var digits = this.value.replace(/\D/g, '');
+    // Enforce max 10 digits
+    if (digits.length > 10) digits = digits.slice(0, 10);
+    // Put cleaned value back
+    this.value = digits;
+    validate(digits);
+  });
+
+  inp.addEventListener('keypress', function (e) {
+    // Block any non-digit key press
+    if (!/[0-9]/.test(e.key)) e.preventDefault();
+  });
+
+  inp.addEventListener('paste', function (e) {
+    e.preventDefault();
+    var pasted = (e.clipboardData || window.clipboardData).getData('text');
+    var digits = pasted.replace(/\D/g, '').slice(0, 10);
+    this.value = digits;
+    validate(digits);
+  });
+
+  function validate(digits) {
+    inp.classList.remove('phone-valid', 'phone-invalid');
+    hint.className = 'phone-hint';
+    if (digits.length === 0) { hint.textContent = ''; return; }
+    if (digits.length < 10) {
+      inp.classList.add('phone-invalid');
+      hint.classList.add('err');
+      hint.textContent = digits.length + '/10 digits entered';
+    } else {
+      inp.classList.add('phone-valid');
+      hint.classList.add('ok');
+      hint.textContent = '✓ Valid phone number';
+    }
+  }
+})();
+</script>
+
+<%- include('partials/footer') %>

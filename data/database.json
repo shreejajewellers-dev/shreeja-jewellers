@@ -1,0 +1,206 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Payal",
+      "category": "silver",
+      "description": "Silver Fancy Payal",
+      "price": 52500,
+      "weight": 150,
+      "weight_unit": "grams",
+      "purity": "22k",
+      "image": "/uploads/product-1784009508509-8465.jpeg",
+      "is_featured": 0,
+      "is_active": 1,
+      "created_at": "2026-07-14T06:11:48.513Z",
+      "updated_at": "2026-07-14T11:45:44.981Z"
+    },
+    {
+      "id": 2,
+      "name": "Bracelate",
+      "category": "silver",
+      "description": "Bracelate",
+      "price": 8750,
+      "weight": 25,
+      "weight_unit": "grams",
+      "purity": "22k",
+      "image": "/uploads/product-1784009557650-7722.jpeg",
+      "is_featured": 0,
+      "is_active": 1,
+      "created_at": "2026-07-14T06:12:37.651Z",
+      "updated_at": "2026-07-14T11:45:44.982Z"
+    },
+    {
+      "id": 3,
+      "name": "Gold Chain",
+      "category": "gold",
+      "description": "Gold Chain 20 C",
+      "price": 49500,
+      "weight": 3.5,
+      "weight_unit": "grams",
+      "purity": "20k",
+      "image": "/uploads/product-1784009607239-8472.jpeg",
+      "is_featured": 0,
+      "is_active": 1,
+      "created_at": "2026-07-14T06:13:27.240Z",
+      "updated_at": "2026-07-14T11:45:44.982Z"
+    },
+    {
+      "id": 4,
+      "name": "Rudraksha_Mala_1500",
+      "category": "diamond",
+      "description": "Rudraksha_Mala_1500",
+      "price": 1500,
+      "weight": 0,
+      "weight_unit": "grams",
+      "purity": "",
+      "image": "/uploads/product-1784009649160-4709.jpeg",
+      "is_featured": 0,
+      "is_active": 1,
+      "created_at": "2026-07-14T06:14:09.162Z",
+      "updated_at": "2026-07-14T11:45:44.983Z"
+    },
+    {
+      "id": 5,
+      "name": "Victoria Coin",
+      "category": "silver",
+      "description": "Victoria Silver Coin",
+      "price": 3500,
+      "weight": 11.664,
+      "weight_unit": "grams",
+      "purity": "1",
+      "image": "/uploads/product-1784018810143-1408.jpeg",
+      "is_featured": 0,
+      "is_active": 1,
+      "created_at": "2026-07-14T08:43:55.050Z",
+      "updated_at": "2026-07-14T11:45:44.983Z"
+    },
+    {
+      "id": 6,
+      "name": "Victoria Coin 2",
+      "category": "silver",
+      "description": "Victoria Silver Coin",
+      "price": 3500,
+      "weight": 11.664,
+      "weight_unit": "grams",
+      "purity": "1",
+      "image": "/uploads/product-1784029610307-2381.jpeg",
+      "is_featured": 0,
+      "is_active": 1,
+      "created_at": "2026-07-14T10:21:26.602Z",
+      "updated_at": "2026-07-14T11:46:50.311Z"
+    }
+  ],
+  "admins": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "$2a$10$3T/4Z2wmFESf1uyzB1U61u3abHS3GYLWKYyR5Pt9ze7bcmYjoDKsO",
+      "created_at": "2026-07-14T05:41:56.843Z"
+    }
+  ],
+  "_productSeq": 6,
+  "_adminSeq": 1,
+  "inquiries": [
+    {
+      "id": 1,
+      "customer_name": "Sudhir Soni",
+      "customer_email": "sudhir_soni@dishtv.in",
+      "customer_phone": "09711613462",
+      "message": "i want putchers ",
+      "items": [
+        {
+          "id": 5,
+          "name": "Victoria Coin",
+          "category": "silver",
+          "price": 3500,
+          "weight": 11.664,
+          "weight_unit": "grams",
+          "purity": "1",
+          "image": "/uploads/product-1784018810143-1408.jpeg"
+        }
+      ],
+      "total": 3500,
+      "status": "new",
+      "created_at": "2026-07-14T08:47:35.589Z"
+    },
+    {
+      "id": 2,
+      "customer_name": "Kavindra",
+      "customer_email": "sudhir_soni@dishtv.in",
+      "customer_phone": "8588011500",
+      "message": "Request",
+      "items": [
+        {
+          "id": 1,
+          "name": "Payal",
+          "category": "silver",
+          "price": 52500,
+          "weight": 150,
+          "weight_unit": "grams",
+          "purity": "22k",
+          "image": "/uploads/product-1784009508509-8465.jpeg"
+        },
+        {
+          "id": 4,
+          "name": "Rudraksha_Mala_1500",
+          "category": "diamond",
+          "price": 1500,
+          "weight": 0,
+          "weight_unit": "ct",
+          "purity": "",
+          "image": "/uploads/product-1784009649160-4709.jpeg"
+        }
+      ],
+      "total": 54000,
+      "status": "new",
+      "created_at": "2026-07-14T09:35:10.872Z"
+    },
+    {
+      "id": 3,
+      "customer_name": "Kavindra",
+      "customer_email": "sudhir_soni@dishtv.in",
+      "customer_phone": "8588011500",
+      "message": "aaa",
+      "items": [
+        {
+          "id": 4,
+          "name": "Rudraksha_Mala_1500",
+          "category": "diamond",
+          "price": 1500,
+          "weight": 0,
+          "weight_unit": "ct",
+          "purity": "",
+          "image": "/uploads/product-1784009649160-4709.jpeg"
+        }
+      ],
+      "total": 1500,
+      "status": "new",
+      "created_at": "2026-07-14T09:47:08.365Z"
+    },
+    {
+      "id": 4,
+      "customer_name": "testing ",
+      "customer_email": "test@gmai.com",
+      "customer_phone": "99999999",
+      "message": "Testing",
+      "items": [
+        {
+          "id": 3,
+          "name": "Gold Chain",
+          "category": "gold",
+          "price": 49500,
+          "weight": 3.5,
+          "weight_unit": "grams",
+          "purity": "20k",
+          "image": "/uploads/product-1784009607239-8472.jpeg"
+        }
+      ],
+      "total": 49500,
+      "status": "read",
+      "created_at": "2026-07-14T10:04:05.972Z"
+    }
+  ],
+  "settings": {},
+  "_inquirySeq": 4
+}

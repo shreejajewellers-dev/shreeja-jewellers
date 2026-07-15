@@ -1,0 +1,241 @@
+<%- include('../partials/admin-nav') %>
+<div class="admin-layout">
+  <%- include('../partials/admin-sidebar') %>
+  <main class="admin-main">
+
+    <!-- Page Header -->
+    <div class="pg-header">
+      <div class="pg-header-left">
+        <div class="pg-icon inq-pg-icon"><i class="fas fa-inbox"></i></div>
+        <div>
+          <h1 class="pg-title">Customer Enquiries</h1>
+          <p class="pg-sub">Review and manage product enquiries from your customers</p>
+        </div>
+      </div>
+      <% if (newCount > 0) { %>
+        <div class="new-alert-chip">
+          <span class="blink-dot"></span>
+          <%= newCount %> new enquir<%= newCount === 1 ? 'y' : 'ies' %>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="inq-stats-row">
+      <div class="inq-stat-card total">
+        <div class="isc-icon"><i class="fas fa-inbox"></i></div>
+        <div class="isc-info">
+          <span class="isc-num"><%= inquiries.length %></span>
+          <span class="isc-label">Total Enquiries</span>
+        </div>
+      </div>
+      <div class="inq-stat-card new-stat">
+        <div class="isc-icon"><i class="fas fa-star"></i></div>
+        <div class="isc-info">
+          <span class="isc-num"><%= newCount %></span>
+          <span class="isc-label">New / Unread</span>
+        </div>
+      </div>
+      <div class="inq-stat-card read-stat">
+        <div class="isc-icon"><i class="fas fa-check-double"></i></div>
+        <div class="isc-info">
+          <span class="isc-num"><%= inquiries.length - newCount %></span>
+          <span class="isc-label">Read</span>
+        </div>
+      </div>
+      <div class="inq-stat-card value-stat">
+        <div class="isc-icon"><i class="fas fa-rupee-sign"></i></div>
+        <div class="isc-info">
+          <span class="isc-num">₹<%= Number(inquiries.reduce((s,i)=>s+Number(i.total||0),0)).toLocaleString('en-IN') %></span>
+          <span class="isc-label">Total Value</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <% if (inquiries.length === 0) { %>
+    <div class="inq-empty">
+      <div class="inq-empty-icon"><i class="fas fa-inbox"></i></div>
+      <h3>No enquiries yet</h3>
+      <p>When customers add items to their cart and submit an enquiry, it will appear here.</p>
+      <a href="/" target="_blank" class="inq-empty-btn"><i class="fas fa-external-link-alt"></i> View Website</a>
+    </div>
+
+    <% } else { %>
+    <div class="inq-table-card">
+      <div class="inq-table-header">
+        <span class="inq-table-count"><%= inquiries.length %> enquir<%= inquiries.length===1?'y':'ies' %></span>
+      </div>
+      <div class="inq-table-wrap">
+        <table class="inq-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Items</th>
+              <th>Value</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% inquiries.forEach(inq => { %>
+            <tr class="inq-row <%= inq.status === 'new' ? 'row-new' : '' %>">
+
+              <!-- ID -->
+              <td class="col-id">#<%= inq.id %></td>
+
+              <!-- Customer -->
+              <td class="col-customer">
+                <div class="cust-wrap">
+                  <div class="cust-avatar"><%= inq.customer_name.charAt(0).toUpperCase() %></div>
+                  <div class="cust-info">
+                    <span class="cust-name"><%= inq.customer_name %></span>
+                    <% if (inq.customer_email) { %>
+                      <span class="cust-email"><%= inq.customer_email %></span>
+                    <% } %>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Phone -->
+              <td class="col-phone">
+                <a href="tel:<%= inq.customer_phone %>" class="phone-link">
+                  <i class="fas fa-phone-alt"></i> <%= inq.customer_phone || '—' %>
+                </a>
+              </td>
+
+              <!-- Items -->
+              <td class="col-items">
+                <span class="item-chip"><i class="fas fa-gem"></i> <%= inq.items.length %> item<%= inq.items.length===1?'':'s' %></span>
+              </td>
+
+              <!-- Value -->
+              <td class="col-value">₹<%= Number(inq.total).toLocaleString('en-IN') %></td>
+
+              <!-- Date -->
+              <td class="col-date"><%= new Date(inq.created_at).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }) %></td>
+
+              <!-- Status -->
+              <td class="col-status">
+                <span class="status-pill sp-<%= inq.status %>">
+                  <% if (inq.status === 'new') { %><i class="fas fa-circle blink"></i><% } else { %><i class="fas fa-check"></i><% } %>
+                  <%= inq.status === 'new' ? 'New' : 'Read' %>
+                </span>
+              </td>
+
+              <!-- Actions -->
+              <td class="col-actions">
+                <a href="/admin/inquiries/<%= inq.id %>" class="act-btn act-view" title="View Details">
+                  <i class="fas fa-eye"></i>
+                </a>
+                <a href="https://wa.me/91<%= inq.customer_phone %>" target="_blank" class="act-btn act-wa" title="WhatsApp">
+                  <i class="fab fa-whatsapp"></i>
+                </a>
+                <form method="POST" action="/admin/inquiries/delete/<%= inq.id %>" class="del-inq-form" style="display:inline">
+                  <button type="submit" class="act-btn act-del" title="Delete" data-name="<%= inq.customer_name %>">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <% } %>
+
+  </main>
+</div>
+
+<style>
+/* ── Page Header (reused) ─────────────────────────── */
+.pg-header        { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 14px; }
+.pg-header-left   { display: flex; align-items: center; gap: 16px; }
+.pg-icon          { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, rgba(200,151,75,.25), rgba(200,151,75,.05)); border: 1px solid rgba(200,151,75,.25); display: flex; align-items: center; justify-content: center; font-size: 22px; color: var(--gold); flex-shrink: 0; }
+.inq-pg-icon      { background: linear-gradient(135deg, rgba(200,151,75,.25), rgba(200,151,75,.05)); }
+.pg-title         { font-family: var(--serif); font-size: 1.55rem; color: var(--text); line-height: 1.2; }
+.pg-sub           { font-size: 13px; color: var(--muted); margin-top: 3px; }
+.new-alert-chip   { display: flex; align-items: center; gap: 8px; background: rgba(200,151,75,.12); border: 1px solid rgba(200,151,75,.25); color: var(--gold); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 700; }
+.blink-dot        { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: pulse-dot 1.5s infinite; display: inline-block; }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.7)} }
+
+/* ── Stats Row ────────────────────────────────────── */
+.inq-stats-row    { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.inq-stat-card    { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; align-items: center; gap: 16px; transition: border-color .2s; }
+.inq-stat-card:hover { border-color: rgba(200,151,75,.3); }
+.isc-icon         { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.total   .isc-icon { background: rgba(200,151,75,.12); color: var(--gold); }
+.new-stat .isc-icon{ background: rgba(255,200,50,.12); color: #f6c90e; }
+.read-stat .isc-icon{ background: rgba(56,161,105,.12); color: #68d391; }
+.value-stat .isc-icon{ background: rgba(200,151,75,.15); color: var(--gold); }
+.isc-info         { display: flex; flex-direction: column; gap: 3px; }
+.isc-num          { font-size: 1.4rem; font-weight: 700; color: var(--text); line-height: 1; font-variant-numeric: tabular-nums; }
+.isc-label        { font-size: 12px; color: var(--muted); }
+
+/* ── Empty State ──────────────────────────────────── */
+.inq-empty        { text-align: center; padding: 80px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; }
+.inq-empty-icon   { width: 80px; height: 80px; border-radius: 50%; background: rgba(200,151,75,.06); border: 1px solid rgba(200,151,75,.12); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: var(--border); margin: 0 auto 20px; }
+.inq-empty h3     { font-family: var(--serif); font-size: 1.3rem; color: var(--gold); margin-bottom: 8px; }
+.inq-empty p      { color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+.inq-empty-btn    { display: inline-flex; align-items: center; gap: 8px; background: rgba(200,151,75,.1); border: 1px solid rgba(200,151,75,.2); color: var(--gold); padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; text-decoration: none; transition: background .2s; }
+.inq-empty-btn:hover { background: rgba(200,151,75,.2); }
+
+/* ── Table Card ───────────────────────────────────── */
+.inq-table-card   { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+.inq-table-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; }
+.inq-table-count  { font-size: 13px; color: var(--muted); font-weight: 600; }
+.inq-table-wrap   { overflow-x: auto; }
+.inq-table        { width: 100%; border-collapse: collapse; min-width: 760px; }
+.inq-table thead tr { background: rgba(255,255,255,.02); }
+.inq-table th     { padding: 13px 16px; text-align: left; font-size: 11px; color: var(--muted); font-weight: 700; letter-spacing: .8px; text-transform: uppercase; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.inq-table td     { padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.03); vertical-align: middle; }
+.inq-row:last-child td { border-bottom: none; }
+.inq-row          { transition: background .15s; }
+.inq-row:hover    { background: rgba(255,255,255,.02); }
+.row-new          { background: rgba(200,151,75,.025); }
+.row-new:hover    { background: rgba(200,151,75,.045); }
+
+/* ── Columns ──────────────────────────────────────── */
+.col-id     { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.col-customer .cust-wrap  { display: flex; align-items: center; gap: 12px; }
+.cust-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #111; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.cust-info   { display: flex; flex-direction: column; gap: 2px; }
+.cust-name   { font-size: 13.5px; font-weight: 700; color: var(--text); }
+.cust-email  { font-size: 11.5px; color: var(--muted); }
+.col-phone   { white-space: nowrap; }
+.phone-link  { color: var(--gold); font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: opacity .2s; }
+.phone-link:hover { opacity: .75; }
+.phone-link i { font-size: 11px; }
+.item-chip   { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); background: rgba(255,255,255,.04); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border); }
+.col-value   { font-weight: 700; color: var(--gold); font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.col-date    { font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+.status-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 20px; letter-spacing: .3px; }
+.sp-new  { background: rgba(200,151,75,.15); color: var(--gold); border: 1px solid rgba(200,151,75,.25); }
+.sp-new i.blink { font-size: 6px; animation: pulse-dot 1.5s infinite; }
+.sp-read { background: rgba(255,255,255,.05); color: #555; border: 1px solid var(--border); }
+.col-actions { display: flex; gap: 6px; }
+.act-btn  { width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; text-decoration: none; transition: background .2s, transform .15s; }
+.act-btn:hover { transform: translateY(-1px); }
+.act-view { background: rgba(200,151,75,.1); color: var(--gold); }
+.act-view:hover { background: rgba(200,151,75,.22); }
+.act-wa   { background: rgba(37,211,102,.1); color: #25d366; }
+.act-wa:hover { background: rgba(37,211,102,.22); }
+.act-del  { background: rgba(229,62,62,.08); color: #e53e3e; }
+.act-del:hover { background: rgba(229,62,62,.2); }
+
+@media (max-width: 900px) { .inq-stats-row { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 540px) { .inq-stats-row { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+document.querySelectorAll('.del-inq-form').forEach(f => {
+  f.addEventListener('submit', function(e) {
+    const name = this.querySelector('[data-name]').dataset.name;
+    if (!confirm('Delete enquiry from "' + name + '"?\nThis cannot be undone.')) e.preventDefault();
+  });
+});
+</script>

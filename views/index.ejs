@@ -1,0 +1,213 @@
+<%- include('partials/header', { title, cartCount }) %>
+
+<!-- ── Banner ──────────────────────────────────────────────── -->
+<div class="site-banner">
+  <img src="/images/Banner.png" alt="Crafted for Royalty – Priced for You | Shreeja Jewellers" class="site-banner-img">
+</div>
+
+<!-- ── Shop by Category ───────────────────────────────────── -->
+<section class="shop-cat-section">
+  <div class="container">
+    <div class="sdt-row">
+      <span class="sdt-line"></span>
+      <i class="fas fa-gem sdt-icon"></i>
+      <h2 class="sdt-heading">SHOP BY CATEGORY</h2>
+      <i class="fas fa-gem sdt-icon"></i>
+      <span class="sdt-line right"></span>
+    </div>
+    <div class="cat-circles-row">
+      <a href="/category/gold" class="cat-circle-item">
+        <div class="cat-circle-img cc-gold"><i class="fas fa-crown"></i></div>
+        <h4>Gold Jewellery</h4>
+        <span class="explore-now">Explore Now »</span>
+      </a>
+      <a href="/category/diamond" class="cat-circle-item">
+        <div class="cat-circle-img cc-diamond"><i class="fas fa-gem"></i></div>
+        <h4>Diamond Jewellery</h4>
+        <span class="explore-now">Explore Now »</span>
+      </a>
+      <a href="/category/silver" class="cat-circle-item">
+        <div class="cat-circle-img cc-silver"><i class="fas fa-star"></i></div>
+        <h4>Silver Jewellery</h4>
+        <span class="explore-now">Explore Now »</span>
+      </a>
+      <a href="/category/gold" class="cat-circle-item">
+        <div class="cat-circle-img cc-bridal"><i class="fas fa-heart"></i></div>
+        <h4>Bridal Collection</h4>
+        <span class="explore-now">Explore Now »</span>
+      </a>
+      <a href="/category/silver" class="cat-circle-item">
+        <div class="cat-circle-img cc-kids"><i class="fas fa-star-of-life"></i></div>
+        <h4>Kids Jewellery</h4>
+        <span class="explore-now">Explore Now »</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── New Arrivals ───────────────────────────────────────── -->
+<% if (latest.length > 0) { %>
+<section class="prow-section">
+  <div class="container">
+    <div class="prow-header">
+      <h2 class="prow-title">NEW ARRIVALS</h2>
+      <div class="prow-controls">
+        <a href="/category/gold" class="prow-viewall">View All</a>
+        <button class="prow-arrow-btn"><i class="fas fa-chevron-left"></i></button>
+        <button class="prow-arrow-btn"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+    <div class="prow-grid">
+      <% latest.slice(0, 5).forEach(p => { %>
+      <a href="/product/<%= p.id %>" class="prow-card">
+        <div class="prow-img-wrap">
+          <span class="prow-badge-new">NEW</span>
+          <% if (p.image) { %>
+            <img src="<%= p.image %>" alt="<%= p.name %>" loading="lazy">
+          <% } else { %>
+            <div class="prow-no-img cc-<%= p.category %>">
+              <i class="fas fa-<%= p.category==='gold'?'crown':p.category==='diamond'?'gem':'star' %>"></i>
+            </div>
+          <% } %>
+        </div>
+        <div class="prow-info">
+          <p class="prow-name"><%= p.name %></p>
+          <div class="prow-bottom">
+            <span class="prow-price">₹<%= Number(p.price).toLocaleString('en-IN') %></span>
+            <% if (p.weight > 0) { %><span class="prow-wt"><%= p.weight %> <%= p.weight_unit %></span><% } %>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- ── Best Sellers ───────────────────────────────────────── -->
+<% if (featured.length > 0) { %>
+<section class="prow-section prow-alt">
+  <div class="container">
+    <div class="prow-header">
+      <h2 class="prow-title">BEST SELLERS</h2>
+      <div class="prow-controls">
+        <a href="/category/gold" class="prow-viewall">View All</a>
+        <button class="prow-arrow-btn"><i class="fas fa-chevron-left"></i></button>
+        <button class="prow-arrow-btn"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+    <div class="prow-grid">
+      <% featured.slice(0, 5).forEach(p => { %>
+      <a href="/product/<%= p.id %>" class="prow-card">
+        <div class="prow-img-wrap">
+          <% if (p.image) { %>
+            <img src="<%= p.image %>" alt="<%= p.name %>" loading="lazy">
+          <% } else { %>
+            <div class="prow-no-img cc-<%= p.category %>">
+              <i class="fas fa-<%= p.category==='gold'?'crown':p.category==='diamond'?'gem':'star' %>"></i>
+            </div>
+          <% } %>
+        </div>
+        <div class="prow-info">
+          <p class="prow-name"><%= p.name %></p>
+          <div class="prow-bottom">
+            <span class="prow-price">₹<%= Number(p.price).toLocaleString('en-IN') %></span>
+            <% if (p.weight > 0) { %><span class="prow-wt"><%= p.weight %> <%= p.weight_unit %></span><% } %>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- Empty state -->
+<% if (latest.length === 0 && featured.length === 0) { %>
+<section class="section">
+  <div class="container" style="text-align:center;padding:80px 0">
+    <i class="fas fa-gem" style="font-size:4rem;color:var(--gold);margin-bottom:20px"></i>
+    <h2>Products Coming Soon</h2>
+    <p style="color:var(--muted);margin-top:10px">Visit the admin panel to add your first jewellery items.</p>
+    <a href="/admin" class="btn btn-gold" style="margin-top:24px">Go to Admin Panel</a>
+  </div>
+</section>
+<% } %>
+
+<!-- ── Trust Bar ───────────────────────────────────────────── -->
+<div class="trust-bar-v2">
+  <div class="container trust-bar-v2-inner">
+    <div class="tbv2-item">
+      <i class="fas fa-certificate"></i>
+      <div><strong>Hallmarked Jewellery</strong><span>100% BIS Certified</span></div>
+    </div>
+    <div class="tbv2-sep"></div>
+    <div class="tbv2-item">
+      <i class="fas fa-gem"></i>
+      <div><strong>Certified Diamonds</strong><span>IGI / GIA Certified</span></div>
+    </div>
+    <div class="tbv2-sep"></div>
+    <div class="tbv2-item">
+      <i class="fas fa-exchange-alt"></i>
+      <div><strong>Exchange &amp; Buyback</strong><span>Easy &amp; Transparent</span></div>
+    </div>
+    <div class="tbv2-sep"></div>
+    <div class="tbv2-item">
+      <i class="fas fa-shield-alt"></i>
+      <div><strong>Secure Payment</strong><span>100% Safe &amp; Secure</span></div>
+    </div>
+    <div class="tbv2-sep"></div>
+    <div class="tbv2-item">
+      <i class="fas fa-truck"></i>
+      <div><strong>Free Shipping</strong><span>All Over India</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Testimonials + Instagram ───────────────────────────── -->
+<section class="testi-insta-section">
+  <div class="container testi-insta-inner">
+    <!-- Testimonials -->
+    <div class="testi-col">
+      <h3 class="ti-heading">WHAT OUR CUSTOMERS SAY</h3>
+      <div class="testi-block">
+        <div class="testi-quote"><i class="fas fa-quote-left"></i></div>
+        <p class="testi-text">The jewellery from Shreeja Jewellers is simply stunning! Elegant designs, trusted quality and excellent customer service.</p>
+        <p class="testi-author">— Priya Sharma</p>
+        <div class="testi-dots">
+          <span class="tdot active"></span>
+          <span class="tdot"></span>
+          <span class="tdot"></span>
+        </div>
+      </div>
+    </div>
+    <!-- Instagram -->
+    <div class="insta-col">
+      <h3 class="ti-heading">FOLLOW US ON INSTAGRAM</h3>
+      <div class="insta-grid">
+        <div class="insta-cell cc-gold"><i class="fas fa-crown"></i></div>
+        <div class="insta-cell cc-gold"><i class="fas fa-ring"></i></div>
+        <div class="insta-cell cc-diamond"><i class="fas fa-gem"></i></div>
+        <div class="insta-cell cc-silver"><i class="fas fa-star"></i></div>
+        <div class="insta-cell cc-gold"><i class="fas fa-crown"></i></div>
+      </div>
+      <a href="https://www.instagram.com" target="_blank" class="btn-insta-follow">
+        FOLLOW US @SHREEJAJEWELLERS
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── WhatsApp CTA ────────────────────────────────────────── -->
+<section class="section cta-section">
+  <div class="container cta-inner">
+    <h2>Have a Question or Custom Order?</h2>
+    <p>Chat with us directly on WhatsApp — we're happy to help!</p>
+    <a href="https://wa.me/917049035660?text=Hello%20Shreeja%20Jewellers%2C%20I%20would%20like%20to%20enquire%20about%20your%20jewellery."
+       target="_blank" class="btn btn-whatsapp">
+      <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+    </a>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

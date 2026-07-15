@@ -1,0 +1,75 @@
+<%- include('partials/header', { title, cartCount }) %>
+
+<div class="page-banner banner-<%= category %>">
+  <div class="banner-overlay"></div>
+  <div class="banner-content">
+    <h1><%= categoryName %></h1>
+    <div class="gold-divider center"></div>
+    <p><%= products.length %> piece<%= products.length!==1?'s':'' %> available</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <!-- Sort bar -->
+    <div class="sort-bar">
+      <span class="sort-label">Sort by:</span>
+      <div class="sort-links">
+        <% [['newest','Newest'],['oldest','Oldest'],['price-low','Price: Low to High'],['price-high','Price: High to Low'],['name','Name A-Z']].forEach(([val,label]) => { %>
+        <a href="?sort=<%= val %>" class="sort-link <%= sortBy===val?'active':'' %>"><%= label %></a>
+        <% }) %>
+      </div>
+    </div>
+
+    <% if (products.length === 0) { %>
+    <div class="empty-state">
+      <i class="fas fa-<%= category==='gold'?'crown':category==='diamond'?'gem':'star' %>"></i>
+      <h3>No <%= categoryName %> products yet</h3>
+      <p>Check back soon — we're adding new pieces regularly.</p>
+      <a href="/" class="btn btn-gold">Back to Home</a>
+    </div>
+    <% } else { %>
+    <div class="product-grid">
+      <% products.forEach(p => { %>
+      <a href="/product/<%= p.id %>" class="product-card">
+        <div class="product-img-wrap">
+          <% if (p.image) { %>
+            <img src="<%= p.image %>" alt="<%= p.name %>" loading="lazy">
+          <% } else { %>
+            <div class="product-img-placeholder cat-placeholder-<%= p.category %>">
+              <i class="fas fa-<%= p.category==='gold'?'crown':p.category==='diamond'?'gem':'star' %>"></i>
+            </div>
+          <% } %>
+          <% if (p.is_featured) { %><span class="badge-featured">Featured</span><% } %>
+        </div>
+        <div class="product-info">
+          <h3><%= p.name %></h3>
+          <% if (p.purity) { %><p class="product-purity"><%= p.purity %></p><% } %>
+          <div class="product-meta">
+            <% if (p.weight > 0) { %><span class="product-weight"><i class="fas fa-balance-scale"></i> <%= p.weight %> <%= p.weight_unit %></span><% } %>
+            <span class="product-price">₹<%= Number(p.price).toLocaleString('en-IN') %></span>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+    <% } %>
+
+  </div>
+</section>
+
+<!-- Nav to other categories -->
+<section class="section-sm other-cats">
+  <div class="container">
+    <p>Also explore:</p>
+    <% ['gold','diamond','silver'].filter(c=>c!==category).forEach(c => { %>
+    <a href="/category/<%= c %>" class="btn btn-<%= c %>">
+      <i class="fas fa-<%= c==='gold'?'crown':c==='diamond'?'gem':'star' %>"></i>
+      <%= c.charAt(0).toUpperCase()+c.slice(1) %> Collection
+    </a>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

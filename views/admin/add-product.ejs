@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<%- include('../partials/admin-nav') %>
+<div class="admin-layout">
+  <%- include('../partials/admin-sidebar') %>
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Add New Product</h1>
+      <a href="/admin/products" class="btn-admin-secondary"><i class="fas fa-arrow-left"></i> Back to Products</a>
+    </div>
+
+    <% if (error) { %><div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= error %></div><% } %>
+    <% if (success) { %><div class="alert alert-success"><i class="fas fa-check-circle"></i> <%= success %></div><% } %>
+
+    <div class="admin-card">
+      <form method="POST" action="/admin/products/add" enctype="multipart/form-data" class="product-form">
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label>Product Name <span class="req">*</span></label>
+            <input type="text" name="name" placeholder="e.g. Gold Kundan Necklace" required maxlength="200">
+          </div>
+          <div class="form-group">
+            <label>Category <span class="req">*</span></label>
+            <select name="category" required>
+              <option value="">Select Category</option>
+              <option value="gold">Gold</option>
+              <option value="diamond">Diamond</option>
+              <option value="silver">Silver</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Price (₹) <span class="req">*</span></label>
+            <input type="number" name="price" placeholder="0" min="0" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label>Weight</label>
+            <input type="number" name="weight" placeholder="0" min="0" step="0.001">
+          </div>
+          <div class="form-group">
+            <label>Weight Unit</label>
+            <select name="weight_unit">
+              <option value="grams">Grams</option>
+              <option value="tola">Tola</option>
+              <option value="ct">Carats (ct)</option>
+              <option value="kg">Kilograms</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Purity / Hallmark</label>
+            <input type="text" name="purity" placeholder="e.g. 22K, 18K, 925, VVS1" maxlength="50">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="description" rows="4" placeholder="Describe the jewellery piece — style, occasion, design details…"></textarea>
+        </div>
+
+        <div class="form-row align-end">
+          <div class="form-group flex-2">
+            <label>Product Image</label>
+            <input type="file" name="image" accept="image/*" id="imageInput" class="file-input">
+            <div id="imagePreview" class="image-preview-box">
+              <i class="fas fa-camera"></i>
+              <p>Click to select image (JPG, PNG, WEBP — max 15 MB)</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="check-label">
+              <input type="checkbox" name="is_featured" value="1">
+              <span class="check-text"><i class="fas fa-star" style="color:#d4af37"></i> Mark as Featured</span>
+            </label>
+            <p class="hint">Featured products appear on the home page showcase.</p>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-admin-primary btn-lg"><i class="fas fa-plus"></i> Add Product</button>
+          <a href="/admin/products" class="btn-admin-secondary btn-lg">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+<script src="/js/main.js"></script>
+</body>
+</html>

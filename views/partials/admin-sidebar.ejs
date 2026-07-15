@@ -1,0 +1,43 @@
+<aside class="admin-sidebar" id="adminSidebar">
+  <nav class="sidebar-nav">
+    <a href="/admin/dashboard"          class="sidebar-link <%= typeof title !== 'undefined' && title.includes('Dashboard') ? 'active' : '' %>">
+      <i class="fas fa-tachometer-alt"></i> Dashboard
+    </a>
+    <div class="sidebar-section">Products</div>
+    <a href="/admin/products"           class="sidebar-link <%= typeof title !== 'undefined' && title.includes('Products') && !title.includes('Add') && !title.includes('Edit') ? 'active' : '' %>">
+      <i class="fas fa-list"></i> All Products
+    </a>
+    <a href="/admin/products/add"       class="sidebar-link <%= typeof title !== 'undefined' && title.includes('Add Product') ? 'active' : '' %>">
+      <i class="fas fa-plus"></i> Add Product
+    </a>
+    <a href="/admin/products/import" class="sidebar-link <%= typeof title !== 'undefined' && title.includes('Import') ? 'active' : '' %>">
+      <i class="fas fa-file-upload"></i> Import from Excel
+    </a>
+    <a href="/admin/products?category=gold"    class="sidebar-link sidebar-sub">
+      <i class="fas fa-crown" style="color:#d4af37"></i> Gold
+    </a>
+    <a href="/admin/products?category=diamond" class="sidebar-link sidebar-sub">
+      <i class="fas fa-gem" style="color:#9bb8d4"></i> Diamond
+    </a>
+    <a href="/admin/products?category=silver"  class="sidebar-link sidebar-sub">
+      <i class="fas fa-star" style="color:#c0c0c0"></i> Silver
+    </a>
+    <div class="sidebar-section">Enquiries</div>
+    <a href="/admin/inquiries" class="sidebar-link <%= typeof title !== 'undefined' && title.includes('Enquir') ? 'active' : '' %>">
+      <i class="fas fa-inbox"></i> Customer Enquiries
+    </a>
+    <div class="sidebar-section">Account</div>
+    <a href="/admin/settings" class="sidebar-link <%= typeof title !== 'undefined' && title.includes('Settings') ? 'active' : '' %>">
+      <i class="fas fa-cog"></i> Settings
+    </a>
+    <a href="/admin/change-password"    class="sidebar-link <%= typeof title !== 'undefined' && title.includes('Change Password') ? 'active' : '' %>">
+      <i class="fas fa-key"></i> Change Password
+    </a>
+    <a href="/" target="_blank"         class="sidebar-link">
+      <i class="fas fa-globe"></i> View Website
+    </a>
+    <a href="/admin/logout"             class="sidebar-link logout-link">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+  </nav>
+</aside>

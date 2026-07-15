@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <meta name="description" content="Shreeja Jewellers – Exquisite Gold, Diamond & Silver Jewellery. Crossing Republic, Ghaziabad.">
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ── Topbar ─────────────────────────────────────────────── -->
+<div class="topbar">
+  <div class="container topbar-inner">
+    <div class="topbar-left">
+      <span><i class="fas fa-phone-alt"></i> 7049035660 / 9711291220</span>
+      <span class="topbar-sep">|</span>
+      <span><i class="fas fa-envelope"></i> shreejajewelles@gmail.com</span>
+    </div>
+    <div class="topbar-right">
+      <span class="follow-label">Follow Us:</span>
+      <a href="https://www.facebook.com" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="https://www.instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="https://wa.me/917049035660" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Navbar ─────────────────────────────────────────────── -->
+<nav class="navbar" id="navbar">
+  <div class="container nav-inner">
+    <a href="/" class="brand">
+      <img src="/images/logo.png" alt="Shreeja Jewellers" class="brand-logo">
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/category/gold"    class="nav-link">Gold <i class="fas fa-chevron-down nav-chevron"></i></a></li>
+      <li><a href="/category/diamond" class="nav-link">Diamond <i class="fas fa-chevron-down nav-chevron"></i></a></li>
+      <li><a href="/category/silver"  class="nav-link">Silver <i class="fas fa-chevron-down nav-chevron"></i></a></li>
+      <li><a href="/category/gold"    class="nav-link">Men <i class="fas fa-chevron-down nav-chevron"></i></a></li>
+      <li><a href="/category/gold"    class="nav-link">Women <i class="fas fa-chevron-down nav-chevron"></i></a></li>
+      <li><a href="/category/gold"    class="nav-link">Bridal <i class="fas fa-chevron-down nav-chevron"></i></a></li>
+      <li><a href="/about"            class="nav-link">About Us</a></li>
+      <li><a href="/about#contact"    class="nav-link">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="nav-icon-btn" title="Search"><i class="fas fa-search"></i></button>
+      <button class="nav-icon-btn" title="My Account"><i class="far fa-user"></i></button>
+      <a href="/cart" class="nav-icon-btn nav-cart-icon" title="Cart">
+        <i class="fas fa-shopping-bag"></i>
+        <% if (typeof cartCount !== 'undefined' && cartCount > 0) { %>
+          <span class="cart-badge"><%= cartCount %></span>
+        <% } else { %>
+          <span class="cart-zero">0</span>
+        <% } %>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Highlight active nav link based on URL
+  (function(){
+    var path = window.location.pathname;
+    document.querySelectorAll('.nav-link').forEach(function(a){
+      var href = a.getAttribute('href');
+      if (href && (path === href || (href !== '/' && path.startsWith(href)))) {
+        a.classList.add('nav-active');
+      }
+    });
+    if (path === '/') document.querySelector('.nav-link[href="/"]').classList.add('nav-active');
+  })();
+</script>

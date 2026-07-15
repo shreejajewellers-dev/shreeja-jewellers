@@ -1,0 +1,133 @@
+<%- include('../partials/admin-nav') %>
+<div class="admin-layout">
+  <%- include('../partials/admin-sidebar') %>
+  <main class="admin-main">
+    <div class="admin-header">
+      <div style="display:flex;align-items:center;gap:16px">
+        <a href="/admin/inquiries" class="back-link"><i class="fas fa-arrow-left"></i> All Enquiries</a>
+        <h1 class="admin-page-title">Enquiry #<%= inquiry.id %></h1>
+      </div>
+      <form method="POST" action="/admin/inquiries/delete/<%= inquiry.id %>" class="del-form">
+        <button type="submit" class="btn-del-full" data-name="<%= inquiry.customer_name %>">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </form>
+    </div>
+
+    <div class="inq-detail-layout">
+      <!-- Customer info -->
+      <div class="inq-card">
+        <div class="inq-card-header">
+          <h2><i class="fas fa-user"></i> Customer Details</h2>
+          <span class="status-pill status-<%= inquiry.status %>"><%= inquiry.status === 'new' ? 'New' : 'Read' %></span>
+        </div>
+        <div class="inq-card-body">
+          <div class="detail-row"><span class="dl">Name</span><span class="dv"><%= inquiry.customer_name %></span></div>
+          <div class="detail-row"><span class="dl">Phone</span><span class="dv"><a href="tel:<%= inquiry.customer_phone %>" class="gold-link"><%= inquiry.customer_phone || '—' %></a></span></div>
+          <div class="detail-row"><span class="dl">Email</span><span class="dv"><%= inquiry.customer_email || '—' %></span></div>
+          <div class="detail-row"><span class="dl">Date</span><span class="dv"><%= new Date(inquiry.created_at).toLocaleString('en-IN', { dateStyle:'full', timeStyle:'short' }) %></span></div>
+          <% if (inquiry.message) { %>
+            <div class="detail-row"><span class="dl" style="vertical-align:top">Message</span><span class="dv" style="white-space:pre-wrap"><%= inquiry.message %></span></div>
+          <% } %>
+        </div>
+        <div class="inq-card-actions">
+          <a href="https://wa.me/91<%= inquiry.customer_phone %>" target="_blank" class="btn-wa-contact">
+            <i class="fab fa-whatsapp"></i> WhatsApp Customer
+          </a>
+          <% if (inquiry.customer_email) { %>
+            <a href="mailto:<%= inquiry.customer_email %>" class="btn-email-contact">
+              <i class="fas fa-envelope"></i> Send Email
+            </a>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Products -->
+      <div class="inq-card">
+        <div class="inq-card-header">
+          <h2><i class="fas fa-gem"></i> Enquired Products</h2>
+          <span class="total-chip">Total: ₹<%= Number(inquiry.total).toLocaleString('en-IN') %></span>
+        </div>
+        <div class="inq-products">
+          <% inquiry.items.forEach(item => { %>
+            <div class="inq-product-row">
+              <div class="ip-img">
+                <% if (item.image) { %>
+                  <img src="<%= item.image %>" alt="<%= item.name %>">
+                <% } else { %>
+                  <div class="ip-no-img"><i class="fas fa-gem"></i></div>
+                <% } %>
+              </div>
+              <div class="ip-info">
+                <span class="ip-cat badge-<%= item.category %>"><%= item.category %></span>
+                <p class="ip-name"><%= item.name %></p>
+                <div class="ip-specs">
+                  <% if (item.purity) { %><span><i class="fas fa-certificate"></i> <%= item.purity %></span><% } %>
+                  <% if (item.weight > 0) { %><span><i class="fas fa-weight"></i> <%= item.weight %> <%= item.weight_unit %></span><% } %>
+                </div>
+              </div>
+              <div class="ip-price">₹<%= Number(item.price).toLocaleString('en-IN') %></div>
+            </div>
+          <% }) %>
+        </div>
+        <div class="inq-total-row">
+          <span>Total Enquiry Value</span>
+          <span class="total-big">₹<%= Number(inquiry.total).toLocaleString('en-IN') %></span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<style>
+.back-link    { color: var(--muted); text-decoration: none; font-size: .85rem; transition: color .2s; }
+.back-link:hover { color: var(--gold); }
+.btn-del-full { background: rgba(229,62,62,.1); border: 1px solid rgba(229,62,62,.25); color: #e53e3e; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: .85rem; display: flex; align-items: center; gap: 6px; transition: background .2s; }
+.btn-del-full:hover { background: rgba(229,62,62,.2); }
+.inq-detail-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.inq-card     { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.inq-card-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(212,175,55,.03); }
+.inq-card-header h2 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--gold); }
+.status-pill  { font-size: .7rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: .5px; }
+.status-new   { background: rgba(212,175,55,.15); color: var(--gold); border: 1px solid rgba(212,175,55,.25); }
+.status-read  { background: rgba(255,255,255,.05); color: #555; border: 1px solid var(--border); }
+.total-chip   { background: rgba(212,175,55,.1); color: var(--gold); font-size: .85rem; font-weight: 700; padding: 4px 12px; border-radius: 20px; }
+.inq-card-body { padding: 24px; }
+.detail-row   { display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+.detail-row:last-child { border-bottom: none; }
+.dl  { width: 80px; flex-shrink: 0; font-size: .8rem; color: var(--muted); font-weight: 600; padding-top: 2px; }
+.dv  { color: var(--text); font-size: .9rem; }
+.gold-link { color: var(--gold); text-decoration: none; }
+.gold-link:hover { text-decoration: underline; }
+.inq-card-actions { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 12px; }
+.btn-wa-contact    { display: inline-flex; align-items: center; gap: 8px; background: #25d366; color: #fff; padding: 10px 18px; border-radius: 6px; font-size: .85rem; font-weight: 700; text-decoration: none; transition: opacity .2s; }
+.btn-wa-contact:hover    { opacity: .85; }
+.btn-email-contact { display: inline-flex; align-items: center; gap: 8px; background: rgba(212,175,55,.1); border: 1px solid rgba(212,175,55,.25); color: var(--gold); padding: 10px 18px; border-radius: 6px; font-size: .85rem; font-weight: 700; text-decoration: none; transition: background .2s; }
+.btn-email-contact:hover { background: rgba(212,175,55,.2); }
+.inq-products { padding: 8px 0; }
+.inq-product-row { display: grid; grid-template-columns: 56px 1fr auto; gap: 12px; align-items: center; padding: 14px 24px; border-bottom: 1px solid rgba(255,255,255,.04); }
+.inq-product-row:last-child { border-bottom: none; }
+.ip-img img  { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; }
+.ip-no-img   { width: 56px; height: 56px; border-radius: 6px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--border); }
+.ip-cat      { font-size: .65rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; display: inline-block; margin-bottom: 4px; }
+.badge-gold    { background: rgba(212,175,55,.15); color: var(--gold); }
+.badge-diamond { background: rgba(155,184,212,.15); color: var(--diamond); }
+.badge-silver  { background: rgba(184,184,184,.15); color: var(--silver); }
+.ip-name     { font-size: .9rem; color: var(--text); margin: 0 0 4px; font-weight: 600; }
+.ip-specs    { display: flex; gap: 12px; }
+.ip-specs span { font-size: .75rem; color: var(--muted); }
+.ip-price    { font-weight: 700; color: var(--gold); font-size: .95rem; white-space: nowrap; }
+.inq-total-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-top: 1px solid var(--gold-dark); background: rgba(212,175,55,.04); }
+.inq-total-row span:first-child { color: var(--muted); font-size: .9rem; }
+.total-big   { font-size: 1.3rem; font-weight: 700; color: var(--gold); }
+@media (max-width: 900px) { .inq-detail-layout { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+document.querySelectorAll('.del-form').forEach(f => {
+  f.addEventListener('submit', function(e) {
+    const name = this.querySelector('[data-name]').dataset.name;
+    if (!confirm('Delete enquiry from "' + name + '"?\nThis cannot be undone.')) e.preventDefault();
+  });
+});
+</script>

@@ -1,0 +1,125 @@
+<%- include('partials/header', { title, cartCount }) %>
+
+<div class="breadcrumb-bar">
+  <div class="container">
+    <a href="/">Home</a> <i class="fas fa-chevron-right"></i>
+    <a href="/category/<%= product.category %>"><%= product.category.charAt(0).toUpperCase()+product.category.slice(1) %> Jewellery</a>
+    <i class="fas fa-chevron-right"></i>
+    <span><%= product.name %></span>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container product-detail">
+
+    <!-- Image -->
+    <div class="product-detail-img">
+      <% if (product.image) { %>
+        <img src="<%= product.image %>" alt="<%= product.name %>">
+      <% } else { %>
+        <div class="product-img-placeholder large cat-placeholder-<%= product.category %>">
+          <i class="fas fa-<%= product.category==='gold'?'crown':product.category==='diamond'?'gem':'star' %>"></i>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Details -->
+    <div class="product-detail-info">
+      <span class="badge badge-<%= product.category %> badge-lg">
+        <%= product.category.charAt(0).toUpperCase()+product.category.slice(1) %> Jewellery
+      </span>
+      <h1><%= product.name %></h1>
+      <div class="gold-divider" style="margin:16px 0"></div>
+
+      <div class="detail-price">₹<%= Number(product.price).toLocaleString('en-IN') %></div>
+
+      <div class="detail-specs">
+        <% if (product.weight > 0) { %>
+        <div class="spec-row">
+          <span class="spec-label"><i class="fas fa-balance-scale"></i> Weight</span>
+          <span class="spec-value"><%= product.weight %> <%= product.weight_unit %></span>
+        </div>
+        <% } %>
+        <% if (product.purity) { %>
+        <div class="spec-row">
+          <span class="spec-label"><i class="fas fa-certificate"></i> Purity</span>
+          <span class="spec-value"><%= product.purity %></span>
+        </div>
+        <% } %>
+        <div class="spec-row">
+          <span class="spec-label"><i class="fas fa-tag"></i> Category</span>
+          <span class="spec-value"><%= product.category.charAt(0).toUpperCase()+product.category.slice(1) %> Jewellery</span>
+        </div>
+      </div>
+
+      <% if (product.description) { %>
+      <div class="detail-desc">
+        <h4>Description</h4>
+        <p><%= product.description %></p>
+      </div>
+      <% } %>
+
+      <div class="detail-actions">
+        <% if (inCart) { %>
+          <a href="/cart" class="btn btn-in-cart">
+            <i class="fas fa-shopping-bag"></i> View in Cart
+          </a>
+        <% } else { %>
+          <form method="POST" action="/cart/add/<%= product.id %>" style="display:inline">
+            <button type="submit" class="btn btn-add-cart">
+              <i class="fas fa-shopping-bag"></i> Add to Enquiry Cart
+            </button>
+          </form>
+        <% } %>
+        <a href="https://wa.me/917049035660?text=Hello%20Shreeja%20Jewellers%2C%20I%20am%20interested%20in%20the%20<%= encodeURIComponent(product.name) %>%20(Price%3A%20%E2%82%B9<%= Number(product.price).toLocaleString('en-IN') %>).%20Please%20share%20more%20details."
+           target="_blank" class="btn btn-whatsapp btn-lg">
+          <i class="fab fa-whatsapp"></i> Quick WhatsApp
+        </a>
+      </div>
+
+      <div class="detail-shop-info">
+        <i class="fas fa-store"></i>
+        <div>
+          <strong>Shreeja Jewellers</strong>
+          <span>I-1708, Proview Laboni Apartment, Crossing Republic, Ghaziabad UP 201016</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Related Products -->
+<% if (related.length > 0) { %>
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header">
+      <h2>You Might Also Like</h2>
+      <div class="gold-divider center"></div>
+    </div>
+    <div class="product-grid cols-4">
+      <% related.forEach(p => { %>
+      <a href="/product/<%= p.id %>" class="product-card">
+        <div class="product-img-wrap">
+          <% if (p.image) { %>
+            <img src="<%= p.image %>" alt="<%= p.name %>" loading="lazy">
+          <% } else { %>
+            <div class="product-img-placeholder cat-placeholder-<%= p.category %>">
+              <i class="fas fa-<%= p.category==='gold'?'crown':p.category==='diamond'?'gem':'star' %>"></i>
+            </div>
+          <% } %>
+        </div>
+        <div class="product-info">
+          <h3><%= p.name %></h3>
+          <div class="product-meta">
+            <% if (p.weight > 0) { %><span class="product-weight"><%= p.weight %> <%= p.weight_unit %></span><% } %>
+            <span class="product-price">₹<%= Number(p.price).toLocaleString('en-IN') %></span>
+          </div>
+        </div>
+      </a>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<%- include('partials/footer') %>

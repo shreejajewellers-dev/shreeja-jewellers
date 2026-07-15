@@ -1,0 +1,77 @@
+<footer class="footer">
+  <div class="container footer-grid-v2">
+
+    <!-- Brand -->
+    <div class="footer-brand-col">
+      <img src="/images/logo.png" alt="Shreeja Jewellers" class="footer-logo">
+      <p class="footer-brand-desc">Exquisite jewellery crafted with passion and precision. Visit us at our store in Ghaziabad.</p>
+      <p class="footer-contact-line"><i class="fas fa-map-marker-alt"></i> I-1708, Prateek Wisteria, Crossing Republik,<br>&nbsp;&nbsp;&nbsp;&nbsp;Ghaziabad, Uttar Pradesh – 201016</p>
+      <p class="footer-contact-line"><i class="fas fa-phone-alt"></i> 7049035660 / 9711291220</p>
+      <p class="footer-contact-line"><i class="fas fa-envelope"></i> shreejajewelles@gmail.com</p>
+      <div class="footer-social">
+        <a href="https://www.facebook.com"  target="_blank"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://wa.me/917049035660" target="_blank"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="footer-col-v2">
+      <h4>QUICK LINKS</h4>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/category/gold">Gold Jewellery</a></li>
+        <li><a href="/category/diamond">Diamond Jewellery</a></li>
+        <li><a href="/category/silver">Silver Jewellery</a></li>
+        <li><a href="/category/gold">Bridal Collection</a></li>
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/about#contact">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <!-- Customer Service -->
+    <div class="footer-col-v2">
+      <h4>CUSTOMER SERVICE</h4>
+      <ul>
+        <li><a href="/about">Shipping Policy</a></li>
+        <li><a href="/about">Return Policy</a></li>
+        <li><a href="/about">Exchange Policy</a></li>
+        <li><a href="/about">Privacy Policy</a></li>
+        <li><a href="/about">Terms &amp; Conditions</a></li>
+        <li><a href="/about">FAQ</a></li>
+      </ul>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="footer-col-v2 footer-newsletter-col">
+      <h4>NEWSLETTER</h4>
+      <p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>
+      <form class="newsletter-form" onsubmit="return false;">
+        <input type="email" placeholder="Enter your email" class="newsletter-input">
+        <button type="submit" class="newsletter-btn"><i class="fas fa-paper-plane"></i></button>
+      </form>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom-v2">
+    <div class="container footer-bottom-inner">
+      <p>&copy; <%= new Date().getFullYear() %> Shreeja Jewellers. All Rights Reserved.</p>
+      <p>Designed with <i class="fas fa-heart" style="color:#e74c3c;margin:0 3px"></i> for Shreeja Jewellers</p>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+
+<% if (typeof ga4_id !== 'undefined' && ga4_id) { %>
+<script async src="https://www.googletagmanager.com/gtag/js?id=<%= ga4_id %>"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '<%= ga4_id %>');
+</script>
+<% } %>
+</body>
+</html>

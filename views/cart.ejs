@@ -1,0 +1,153 @@
+<%- include('partials/header', { title, cartCount }) %>
+
+<div class="page-banner">
+  <div class="container">
+    <h1 class="page-title"><i class="fas fa-shopping-bag"></i> My Enquiry Cart</h1>
+    <p class="page-sub">Review your selected items and place an enquiry</p>
+  </div>
+</div>
+
+<section class="cart-section">
+  <div class="container">
+    <% if (cart.length === 0) { %>
+      <div class="empty-cart">
+        <i class="fas fa-shopping-bag empty-icon"></i>
+        <h2>Your cart is empty</h2>
+        <p>Browse our collections and add items you'd like to enquire about.</p>
+        <div class="empty-actions">
+          <a href="/category/gold"    class="btn-gold">Gold Jewellery</a>
+          <a href="/category/diamond" class="btn-outline">Diamond Jewellery</a>
+          <a href="/category/silver"  class="btn-outline">Silver Jewellery</a>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="cart-layout">
+        <div class="cart-items">
+          <div class="cart-header">
+            <h2>Selected Items (<%= cart.length %>)</h2>
+            <a href="/cart/clear" class="clear-cart" onclick="return confirm('Clear all items from cart?')">
+              <i class="fas fa-times"></i> Clear All
+            </a>
+          </div>
+          <% cart.forEach(item => { %>
+            <div class="cart-item">
+              <div class="cart-item-image">
+                <% if (item.image) { %>
+                  <img src="<%= item.image %>" alt="<%= item.name %>">
+                <% } else { %>
+                  <div class="no-img-cart"><i class="fas fa-gem"></i></div>
+                <% } %>
+              </div>
+              <div class="cart-item-info">
+                <span class="item-cat badge-<%= item.category %>"><%= item.category %></span>
+                <h3 class="item-name"><%= item.name %></h3>
+                <div class="item-specs">
+                  <% if (item.purity) { %><span><i class="fas fa-certificate"></i> <%= item.purity %></span><% } %>
+                  <% if (item.weight > 0) { %><span><i class="fas fa-weight"></i> <%= item.weight %> <%= item.weight_unit %></span><% } %>
+                </div>
+              </div>
+              <div class="cart-item-price">
+                <span class="price-label">Price</span>
+                <span class="price-value">₹<%= Number(item.price).toLocaleString('en-IN') %></span>
+              </div>
+              <form method="POST" action="/cart/remove/<%= item.id %>" class="remove-form">
+                <button type="submit" class="remove-btn" title="Remove item">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </form>
+            </div>
+          <% }) %>
+        </div>
+
+        <div class="cart-summary">
+          <div class="summary-box">
+            <h3 class="summary-title">Enquiry Summary</h3>
+            <div class="summary-row">
+              <span>Items</span><span><%= cart.length %></span>
+            </div>
+            <div class="summary-row total-row">
+              <span>Total Value</span>
+              <span class="gold-text">₹<%= Number(total).toLocaleString('en-IN') %></span>
+            </div>
+            <p class="summary-note">
+              <i class="fas fa-info-circle"></i>
+              Prices are indicative and subject to current gold/diamond rates. Our team will confirm the exact price.
+            </p>
+            <a href="/checkout" class="btn-enquire-full">
+              <i class="fas fa-paper-plane"></i> Place Enquiry
+            </a>
+            <a href="/" class="btn-continue">
+              <i class="fas fa-arrow-left"></i> Continue Shopping
+            </a>
+          </div>
+          <div class="wa-help-box">
+            <i class="fab fa-whatsapp wa-icon"></i>
+            <p>Need help? Chat with us directly</p>
+            <a href="https://wa.me/917049035660" target="_blank" class="wa-btn-small">
+              WhatsApp Us
+            </a>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<style>
+.page-banner { background: linear-gradient(135deg, #110e00, #000); padding: 60px 0 40px; text-align: center; border-bottom: 1px solid var(--border); }
+.page-title  { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 8px; }
+.page-sub    { color: var(--muted); font-size: 1rem; }
+.cart-section { padding: 60px 0 80px; }
+.empty-cart   { text-align: center; padding: 80px 20px; }
+.empty-icon   { font-size: 4rem; color: var(--border); margin-bottom: 24px; }
+.empty-cart h2 { font-family: 'Playfair Display', serif; color: var(--gold); margin-bottom: 12px; }
+.empty-cart p  { color: var(--muted); margin-bottom: 32px; }
+.empty-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-gold     { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #000; padding: 12px 28px; border-radius: 6px; font-weight: 700; text-decoration: none; transition: opacity .2s; }
+.btn-gold:hover { opacity: .85; }
+.btn-outline  { border: 1px solid var(--gold); color: var(--gold); padding: 12px 28px; border-radius: 6px; font-weight: 600; text-decoration: none; transition: background .2s; }
+.btn-outline:hover { background: rgba(212,175,55,.1); }
+.cart-layout  { display: grid; grid-template-columns: 1fr 340px; gap: 32px; align-items: start; }
+.cart-header  { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.cart-header h2 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.3rem; }
+.clear-cart   { color: #e53e3e; font-size: .85rem; text-decoration: none; transition: opacity .2s; }
+.clear-cart:hover { opacity: .7; }
+.cart-item    { display: grid; grid-template-columns: 80px 1fr auto 40px; gap: 16px; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 16px; transition: border-color .2s; }
+.cart-item:hover { border-color: var(--gold-dark); }
+.cart-item-image img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; }
+.no-img-cart  { width: 80px; height: 80px; border-radius: 8px; background: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--border); }
+.item-cat     { font-size: .7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px; }
+.badge-gold    { background: rgba(212,175,55,.15); color: var(--gold); }
+.badge-diamond { background: rgba(155,184,212,.15); color: var(--diamond); }
+.badge-silver  { background: rgba(184,184,184,.15); color: var(--silver); }
+.item-name    { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.item-specs   { display: flex; gap: 12px; }
+.item-specs span { font-size: .8rem; color: var(--muted); }
+.cart-item-price { text-align: right; }
+.price-label  { display: block; font-size: .75rem; color: var(--muted); margin-bottom: 4px; }
+.price-value  { font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+.remove-form  { display: flex; }
+.remove-btn   { background: none; border: none; color: #e53e3e; cursor: pointer; font-size: 1rem; padding: 8px; opacity: .6; transition: opacity .2s; }
+.remove-btn:hover { opacity: 1; }
+.summary-box  { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
+.summary-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); margin-bottom: 24px; }
+.summary-row  { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); color: var(--muted); }
+.total-row    { font-weight: 700; font-size: 1.1rem; color: var(--text); border-bottom: none; margin-top: 4px; }
+.gold-text    { color: var(--gold); }
+.summary-note { font-size: .8rem; color: var(--muted); margin: 16px 0 20px; line-height: 1.5; }
+.btn-enquire-full { display: block; text-align: center; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #000; padding: 14px; border-radius: 8px; font-weight: 700; font-size: 1rem; text-decoration: none; margin-bottom: 12px; transition: opacity .2s; }
+.btn-enquire-full:hover { opacity: .85; }
+.btn-continue { display: block; text-align: center; border: 1px solid var(--border); color: var(--muted); padding: 12px; border-radius: 8px; font-size: .9rem; text-decoration: none; transition: border-color .2s; }
+.btn-continue:hover { border-color: var(--gold-dark); color: var(--gold); }
+.wa-help-box  { background: rgba(37,211,102,.05); border: 1px solid rgba(37,211,102,.2); border-radius: 12px; padding: 24px; text-align: center; margin-top: 16px; }
+.wa-icon      { font-size: 2rem; color: #25d366; margin-bottom: 8px; }
+.wa-help-box p { color: var(--muted); font-size: .9rem; margin-bottom: 12px; }
+.wa-btn-small { background: #25d366; color: #fff; padding: 10px 24px; border-radius: 6px; font-weight: 700; text-decoration: none; font-size: .9rem; transition: opacity .2s; }
+.wa-btn-small:hover { opacity: .85; }
+@media (max-width: 768px) {
+  .cart-layout { grid-template-columns: 1fr; }
+  .cart-item   { grid-template-columns: 60px 1fr auto 36px; }
+}
+</style>
+
+<%- include('partials/footer') %>

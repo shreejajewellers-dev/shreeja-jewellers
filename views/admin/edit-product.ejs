@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+<%- include('../partials/admin-nav') %>
+<div class="admin-layout">
+  <%- include('../partials/admin-sidebar') %>
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1>Edit Product</h1>
+      <div>
+        <a href="/product/<%= product.id %>" target="_blank" class="btn-admin-secondary"><i class="fas fa-eye"></i> View</a>
+        <a href="/admin/products" class="btn-admin-secondary"><i class="fas fa-arrow-left"></i> Back</a>
+      </div>
+    </div>
+
+    <% if (error) { %><div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> <%= error %></div><% } %>
+    <% if (success) { %><div class="alert alert-success"><i class="fas fa-check-circle"></i> <%= success %></div><% } %>
+
+    <div class="admin-card">
+      <form method="POST" action="/admin/products/edit/<%= product.id %>" enctype="multipart/form-data" class="product-form">
+
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label>Product Name <span class="req">*</span></label>
+            <input type="text" name="name" value="<%= product.name %>" required maxlength="200">
+          </div>
+          <div class="form-group">
+            <label>Category <span class="req">*</span></label>
+            <select name="category" required>
+              <option value="gold"    <%= product.category==='gold'   ?'selected':'' %>>Gold</option>
+              <option value="diamond" <%= product.category==='diamond'?'selected':'' %>>Diamond</option>
+              <option value="silver"  <%= product.category==='silver' ?'selected':'' %>>Silver</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Price (₹) <span class="req">*</span></label>
+            <input type="number" name="price" value="<%= product.price %>" min="0" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label>Weight</label>
+            <input type="number" name="weight" value="<%= product.weight %>" min="0" step="0.001">
+          </div>
+          <div class="form-group">
+            <label>Weight Unit</label>
+            <select name="weight_unit">
+              <option value="grams"  <%= product.weight_unit==='grams' ?'selected':'' %>>Grams</option>
+              <option value="tola"   <%= product.weight_unit==='tola'  ?'selected':'' %>>Tola</option>
+              <option value="ct"     <%= product.weight_unit==='ct'    ?'selected':'' %>>Carats (ct)</option>
+              <option value="kg"     <%= product.weight_unit==='kg'    ?'selected':'' %>>Kilograms</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Purity / Hallmark</label>
+            <input type="text" name="purity" value="<%= product.purity || '' %>" placeholder="e.g. 22K, 18K, 925" maxlength="50">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="description" rows="4"><%= product.description || '' %></textarea>
+        </div>
+
+        <div class="form-row align-end">
+          <div class="form-group flex-2">
+            <label>Product Image <span class="hint-inline">(Leave empty to keep current image)</span></label>
+            <% if (product.image) { %>
+            <div class="current-image-wrap">
+              <img src="<%= product.image %>" alt="Current" class="current-img-preview" id="imagePreviewImg">
+              <span class="current-img-label">Current image — upload new to replace</span>
+            </div>
+            <% } %>
+            <input type="file" name="image" accept="image/*" id="imageInput" class="file-input">
+            <div id="imagePreview" class="image-preview-box <%= product.image ? 'has-image' : '' %>">
+              <% if (!product.image) { %>
+              <i class="fas fa-camera"></i>
+              <p>Click to select new image</p>
+              <% } else { %>
+              <p>Click to change image</p>
+              <% } %>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="check-label">
+              <input type="checkbox" name="is_featured" value="1" <%= product.is_featured?'checked':'' %>>
+              <span class="check-text"><i class="fas fa-star" style="color:#d4af37"></i> Featured</span>
+            </label>
+            <label class="check-label" style="margin-top:12px">
+              <input type="checkbox" name="is_active" value="1" <%= product.is_active?'checked':'' %>>
+              <span class="check-text"><i class="fas fa-eye"></i> Active (visible on site)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-admin-primary btn-lg"><i class="fas fa-save"></i> Save Changes</button>
+          <a href="/admin/products" class="btn-admin-secondary btn-lg">Cancel</a>
+          <form method="POST" action="/admin/products/delete/<%= product.id %>" style="display:inline;margin-left:auto"
+                onsubmit="return confirm('Delete this product permanently?')">
+            <button type="submit" class="btn-danger btn-lg"><i class="fas fa-trash"></i> Delete Product</button>
+          </form>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+<script src="/js/main.js"></script>
+</body>
+</html>
