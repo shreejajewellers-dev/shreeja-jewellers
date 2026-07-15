@@ -13,7 +13,9 @@ function load() {
   return { products: [], admins: [], inquiries: [], settings: {}, _productSeq: 0, _adminSeq: 0, _inquirySeq: 0 };
 }
 
-function save(data) { fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2)); }
+function save(data) {
+  try { fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2)); } catch (_) { /* read-only FS on serverless */ }
+}
 
 let _db = load();
 if (!_db.inquiries) _db.inquiries = [];

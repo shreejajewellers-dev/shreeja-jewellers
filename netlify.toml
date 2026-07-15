@@ -6,6 +6,9 @@
 [build.environment]
   NODE_VERSION = "18"
 
+[functions]
+  included_files = ["data/**", "views/**", "middleware/**"]
+
 # All non-static routes → Express function
 [[redirects]]
   from   = "/*"
