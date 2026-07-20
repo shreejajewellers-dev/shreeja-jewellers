@@ -5,3 +5,6 @@ server.err
 *.log
 data/tmp/
 ProductDetails/
+
+# Local Netlify folder
+.netlify
