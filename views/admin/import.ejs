@@ -84,6 +84,45 @@
               <span id="fileName">file.xlsx</span>
               <button type="button" class="file-clear" id="fileClear"><i class="fas fa-times"></i></button>
             </div>
+            <!-- Image Options -->
+            <div class="img-upload-section">
+              <div class="img-upload-header">
+                <i class="fas fa-images"></i>
+                <span>Product Images <em>(optional)</em></span>
+              </div>
+
+              <!-- Method A: Folder path -->
+              <div class="img-method">
+                <div class="img-method-title"><span class="method-badge">A</span> Image Folder Path</div>
+                <p class="img-upload-hint">Paste the folder where your images are saved. In Excel, put only the <strong>filename</strong> (e.g. <code>Tikka_1.60.jpeg</code>) in the Image URL column.</p>
+                <input type="text" name="imageFolder" id="imageFolder"
+                  placeholder="e.g.  D:\Sudhir Docs\My Docs\ShreejaJewellers_Website\ProductDetails\JewelleyPics"
+                  class="img-folder-input">
+              </div>
+
+              <div class="img-or-divider"><span>OR</span></div>
+
+              <!-- Method B: Full path in Excel -->
+              <div class="img-method">
+                <div class="img-method-title"><span class="method-badge">B</span> Full Path in Excel</div>
+                <p class="img-upload-hint">Put the complete path in the Image URL column of each row, e.g.<br>
+                  <code>D:\Sudhir Docs\My Docs\ShreejaJewellers_Website\ProductDetails\JewelleyPics\Tikka_1.60.jpeg</code></p>
+              </div>
+
+              <div class="img-or-divider"><span>OR</span></div>
+
+              <!-- Method C: Upload files -->
+              <div class="img-method">
+                <div class="img-method-title"><span class="method-badge">C</span> Upload Image Files</div>
+                <p class="img-upload-hint">Select image files directly. In Excel, put just the <strong>filename</strong> in the Image URL column.</p>
+                <label class="img-upload-label" id="imgUploadLabel">
+                  <i class="fas fa-folder-open"></i> Choose Images
+                  <input type="file" name="productImages" id="productImages" accept="image/*" multiple style="display:none">
+                </label>
+                <div id="imgFileList" class="img-file-list" style="display:none"></div>
+              </div>
+            </div>
+
             <div class="import-options">
               <label class="check-label">
                 <input type="checkbox" name="skip_duplicates" value="1" checked>
@@ -133,11 +172,12 @@
             <div class="img-note">
               <div class="img-note-icon"><i class="fas fa-image"></i></div>
               <div class="img-note-body">
-                <strong>About Product Images</strong>
-                <p>Excel cannot carry image files. Two ways to add images:</p>
+                <strong>3 Ways to Add Images</strong>
                 <ul>
-                  <li><strong>Image URL column</strong> — paste any public https:// link and it saves automatically on import.</li>
-                  <li><strong>Upload after import</strong> — leave Image URL blank, then open each product in Edit Product to upload a photo.</li>
+                  <li><strong>A — Folder Path</strong>: Paste the images folder in the form. Excel column = just the filename e.g. <code>Tikka_1.60.jpeg</code></li>
+                  <li><strong>B — Full Path</strong>: Put the complete Windows path in each Excel row's Image URL cell.</li>
+                  <li><strong>C — Upload Files</strong>: Click "Choose Images", select files. Excel column = filename only.</li>
+                  <li><strong>https:// URL</strong>: Paste any public image link directly in the Image URL column.</li>
                 </ul>
               </div>
             </div>
@@ -160,7 +200,7 @@
                 <tr><td>Purity</td><td><span class="opt-badge">Optional</span></td><td>22K · 18K · 95% · etc.</td></tr>
                 <tr><td>Description</td><td><span class="opt-badge">Optional</span></td><td>Any text</td></tr>
                 <tr><td>Featured</td><td><span class="opt-badge">Optional</span></td><td>Yes · No (default: No)</td></tr>
-                <tr class="img-row"><td>Image URL</td><td><span class="opt-badge">Optional</span></td><td>https:// link to product photo</td></tr>
+                <tr class="img-row"><td>Image URL</td><td><span class="opt-badge">Optional</span></td><td>Filename (e.g. <code>Tikka.jpeg</code>) or https:// URL</td></tr>
               </tbody>
             </table>
           </div>
@@ -235,6 +275,26 @@
 .img-note-body li strong { display: inline; color: var(--text); }
 .img-row td { background: rgba(200,151,75,.04); }
 @media (max-width: 900px) { .import-grid { grid-template-columns: 1fr; } }
+
+/* Image upload section */
+.img-upload-section { border: 1px solid var(--border); border-radius: 10px; padding: 18px; margin: 18px 0 4px; background: rgba(212,175,55,.03); }
+.img-upload-header { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: .95rem; color: var(--gold); margin-bottom: 14px; }
+.img-method { margin-bottom: 4px; }
+.img-method-title { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: .88rem; color: var(--text); margin-bottom: 6px; }
+.method-badge { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); color: #000; font-size: .72rem; font-weight: 900; flex-shrink: 0; }
+.img-upload-hint { font-size: .82rem; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+.img-upload-hint strong { color: var(--text); }
+.img-upload-hint code { background: rgba(255,255,255,.08); padding: 2px 6px; border-radius: 3px; font-size: .75rem; color: var(--gold); word-break: break-all; }
+.img-folder-input { width: 100%; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: .85rem; transition: border-color .2s; }
+.img-folder-input:focus { outline: none; border-color: var(--gold); }
+.img-folder-input::placeholder { color: var(--muted); font-size: .78rem; }
+.img-or-divider { display: flex; align-items: center; gap: 10px; margin: 12px 0; color: var(--muted); font-size: .75rem; font-weight: 700; letter-spacing: 1px; }
+.img-or-divider::before, .img-or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.img-upload-label { display: inline-flex; align-items: center; gap: 7px; padding: 9px 18px; background: rgba(212,175,55,.1); border: 1px solid rgba(212,175,55,.35); color: var(--gold); border-radius: 6px; cursor: pointer; font-size: .88rem; font-weight: 700; transition: background .2s; }
+.img-upload-label:hover { background: rgba(212,175,55,.2); }
+.img-file-list { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; max-height: 100px; overflow-y: auto; }
+.img-chip { display: inline-flex; align-items: center; gap: 5px; background: rgba(39,174,96,.1); border: 1px solid rgba(39,174,96,.25); color: #55d68c; font-size: .75rem; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.img-chip i { font-size: .7rem; }
 </style>
 
 <script>
@@ -278,6 +338,18 @@ dropZone.addEventListener('drop', e => {
 document.getElementById('importForm').addEventListener('submit', function() {
   importBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Importing…';
   importBtn.disabled = true;
+});
+
+// Image file list display
+const productImages = document.getElementById('productImages');
+const imgFileList   = document.getElementById('imgFileList');
+productImages.addEventListener('change', () => {
+  const files = Array.from(productImages.files);
+  if (!files.length) { imgFileList.style.display = 'none'; return; }
+  imgFileList.innerHTML = files.map(f =>
+    `<span class="img-chip"><i class="fas fa-image"></i>${f.name}</span>`
+  ).join('');
+  imgFileList.style.display = 'flex';
 });
 
 // Mutual exclusion for checkboxes

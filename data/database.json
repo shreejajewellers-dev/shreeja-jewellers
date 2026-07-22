@@ -13,7 +13,7 @@
       "is_featured": 0,
       "is_active": 1,
       "created_at": "2026-07-14T06:11:48.513Z",
-      "updated_at": "2026-07-14T11:45:44.981Z"
+      "updated_at": "2026-07-22T06:50:34.810Z"
     },
     {
       "id": 2,
@@ -28,7 +28,7 @@
       "is_featured": 0,
       "is_active": 1,
       "created_at": "2026-07-14T06:12:37.651Z",
-      "updated_at": "2026-07-14T11:45:44.982Z"
+      "updated_at": "2026-07-22T06:50:34.811Z"
     },
     {
       "id": 3,
@@ -43,7 +43,7 @@
       "is_featured": 0,
       "is_active": 1,
       "created_at": "2026-07-14T06:13:27.240Z",
-      "updated_at": "2026-07-14T11:45:44.982Z"
+      "updated_at": "2026-07-22T06:50:34.813Z"
     },
     {
       "id": 4,
@@ -58,7 +58,7 @@
       "is_featured": 0,
       "is_active": 1,
       "created_at": "2026-07-14T06:14:09.162Z",
-      "updated_at": "2026-07-14T11:45:44.983Z"
+      "updated_at": "2026-07-22T06:50:34.813Z"
     },
     {
       "id": 5,
@@ -73,7 +73,7 @@
       "is_featured": 0,
       "is_active": 1,
       "created_at": "2026-07-14T08:43:55.050Z",
-      "updated_at": "2026-07-14T11:45:44.983Z"
+      "updated_at": "2026-07-22T06:50:34.814Z"
     },
     {
       "id": 6,
@@ -88,7 +88,37 @@
       "is_featured": 0,
       "is_active": 1,
       "created_at": "2026-07-14T10:21:26.602Z",
-      "updated_at": "2026-07-14T11:46:50.311Z"
+      "updated_at": "2026-07-22T06:50:34.814Z"
+    },
+    {
+      "id": 7,
+      "name": "Tikka",
+      "category": "gold",
+      "description": "Tikka",
+      "price": 23000,
+      "weight": 1.6,
+      "weight_unit": "grams",
+      "purity": "0.2",
+      "image": "/uploads/product-1784704392246-9738.jpg",
+      "is_featured": 0,
+      "is_active": 1,
+      "created_at": "2026-07-22T05:00:01.085Z",
+      "updated_at": "2026-07-22T07:13:16.310Z"
+    },
+    {
+      "id": 8,
+      "name": "Jhumka",
+      "category": "gold",
+      "description": "Kan Ka Jhumka",
+      "price": 135000,
+      "weight": 8,
+      "weight_unit": "grams",
+      "purity": "0.22",
+      "image": "/uploads/product-1784703051989-6509.jpeg",
+      "is_featured": 0,
+      "is_active": 1,
+      "created_at": "2026-07-22T05:47:10.595Z",
+      "updated_at": "2026-07-22T06:50:51.996Z"
     }
   ],
   "admins": [
@@ -99,7 +129,7 @@
       "created_at": "2026-07-14T05:41:56.843Z"
     }
   ],
-  "_productSeq": 6,
+  "_productSeq": 8,
   "_adminSeq": 1,
   "inquiries": [
     {

@@ -28,24 +28,33 @@ const upload = multer({
   }
 });
 
-// Separate multer instance for Excel/CSV imports — saves to OS temp dir
+// Import multer — Excel goes to data/tmp, product images go to public/uploads
 const importStorage = multer.diskStorage({
   destination(req, file, cb) {
-    const dir = path.join(__dirname, '..', 'data', 'tmp');
+    const dir = file.fieldname === 'productImages'
+      ? path.join(__dirname, '..', 'public', 'uploads')
+      : path.join(__dirname, '..', 'data', 'tmp');
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
   filename(req, file, cb) {
-    cb(null, `import-${Date.now()}${path.extname(file.originalname)}`);
+    if (file.fieldname === 'productImages') {
+      cb(null, `product-${Date.now()}-${Math.floor(Math.random()*9999)}${path.extname(file.originalname)}`);
+    } else {
+      cb(null, `import-${Date.now()}${path.extname(file.originalname)}`);
+    }
   }
 });
 const uploadExcel = multer({
   storage: importStorage,
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter(req, file, cb) {
+    if (file.fieldname === 'productImages') {
+      return /jpeg|jpg|png|gif|webp/i.test(path.extname(file.originalname)) && /image/.test(file.mimetype)
+        ? cb(null, true) : cb(new Error('Only image files allowed'));
+    }
     const ext = path.extname(file.originalname).toLowerCase();
-    const allowed = ['.xlsx', '.xls', '.csv'];
-    allowed.includes(ext)
+    ['.xlsx', '.xls', '.csv'].includes(ext)
       ? cb(null, true)
       : cb(new Error(`Invalid file type "${ext}". Only .xlsx, .xls, .csv are allowed.`));
   }
@@ -120,7 +129,10 @@ router.get('/products/import/template', requireAuth, (req, res) => {
 });
 
 router.post('/products/import', requireAuth, (req, res, next) => {
-  uploadExcel.single('importFile')(req, res, (err) => {
+  uploadExcel.fields([
+    { name: 'importFile',     maxCount: 1   },
+    { name: 'productImages',  maxCount: 500 },
+  ])(req, res, (err) => {
     if (err) {
       return res.render('admin/import', {
         title: 'Import Products – Admin',
@@ -135,15 +147,45 @@ router.post('/products/import', requireAuth, (req, res, next) => {
   const render = (result, error) =>
     res.render('admin/import', { title: 'Import Products – Admin', adminUsername: req.session.adminUsername, result, error });
 
-  if (!req.file) return render(null, 'Please select an Excel or CSV file to upload.');
+  const excelFile = req.files && req.files.importFile ? req.files.importFile[0] : null;
+  if (!excelFile) return render(null, 'Please select an Excel or CSV file to upload.');
+
+  // Build filename → /uploads/savedname map from any uploaded images
+  const imageMap = {};
+  if (req.files && req.files.productImages) {
+    req.files.productImages.forEach(f => {
+      const orig = f.originalname.toLowerCase();
+      const base = path.basename(f.originalname, path.extname(f.originalname)).toLowerCase();
+      imageMap[orig] = '/uploads/' + f.filename;
+      imageMap[base] = '/uploads/' + f.filename;
+    });
+  }
+
+  // Image folder entered manually in the form (e.g. D:\Photos\Products)
+  const imageFolder = (req.body.imageFolder || '').trim().replace(/[/\\]+$/, '');
+
+  // Copy a local file to uploads, return '/uploads/filename' or null on error
+  const uploadsDir = path.join(__dirname, '..', 'public', 'uploads');
+  if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+  function copyLocalImage(srcPath, suffix) {
+    try {
+      // Normalise mixed slashes to OS separator
+      const normalised = srcPath.replace(/[/\\]+/g, path.sep);
+      if (!fs.existsSync(normalised)) return null;
+      const ext      = path.extname(normalised).toLowerCase();
+      const destName = `product-${Date.now()}-${suffix}${ext}`;
+      fs.copyFileSync(normalised, path.join(uploadsDir, destName));
+      return '/uploads/' + destName;
+    } catch { return null; }
+  }
 
   try {
-    const wb = XLSX.readFile(req.file.path);
+    const wb = XLSX.readFile(excelFile.path);
     const ws = wb.Sheets[wb.SheetNames[0]];
     const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
 
     if (rows.length === 0) {
-      fs.unlinkSync(req.file.path);
+      try { fs.unlinkSync(excelFile.path); } catch { /**/ }
       return render(null, 'The uploaded file contains no data rows.');
     }
 
@@ -185,8 +227,41 @@ router.post('/products/import', requireAuth, (req, res, next) => {
       if (!VALID_CATS.includes(cat)) { errors.push({ row: rowNum, reason: `Invalid category "${row[catCol]}" — must be gold, diamond, or silver` }); skipped++; return; }
       if (price <= 0) { errors.push({ row: rowNum, reason: `Invalid price "${row[priceCol]}"` }); skipped++; return; }
 
-      const rawImg  = imgCol ? String(row[imgCol] || '').trim() : '';
-      const image   = /^https?:\/\//i.test(rawImg) ? rawImg : null;
+      const rawImg = imgCol ? String(row[imgCol] || '').trim() : '';
+      let image = null;
+      if (rawImg) {
+        const fname = path.basename(rawImg).toLowerCase();
+        const fbase = path.basename(rawImg, path.extname(rawImg)).toLowerCase();
+
+        if (/^https?:\/\//i.test(rawImg)) {
+          // 1. HTTP URL — use directly
+          image = rawImg;
+
+        } else if (imageMap[fname] || imageMap[fbase]) {
+          // 2. Matched an uploaded image file by filename
+          image = imageMap[fname] || imageMap[fbase];
+
+        } else {
+          // 3. Try local disk paths (full path in cell, or folder + filename)
+          const candidates = [
+            rawImg,                                         // as typed in Excel
+            imageFolder ? path.join(imageFolder, path.basename(rawImg)) : null, // folder + filename
+          ].filter(Boolean);
+
+          let copied = null;
+          for (const candidate of candidates) {
+            copied = copyLocalImage(candidate, i);
+            if (copied) break;
+          }
+
+          if (copied) {
+            image = copied;
+          } else {
+            const tried = candidates.map(c => `"${c}"`).join(', ');
+            errors.push({ row: rowNum, reason: `Image "${fname}" not found (tried ${tried}). Check path or use the image folder field.` });
+          }
+        }
+      }
 
       // Duplicate check
       const existing = store.products.search(name, cat).find(p => p.name.toLowerCase() === name.toLowerCase() && p.category === cat);
@@ -219,10 +294,10 @@ router.post('/products/import', requireAuth, (req, res, next) => {
       imported++;
     });
 
-    try { fs.unlinkSync(req.file.path); } catch { /**/ }
+    try { fs.unlinkSync(excelFile.path); } catch { /**/ }
     render({ imported, skipped, total: rows.length, errors }, null);
   } catch (err) {
-    try { if (req.file) fs.unlinkSync(req.file.path); } catch { /**/ }
+    try { fs.unlinkSync(excelFile.path); } catch { /**/ }
     render(null, `Failed to read file: ${err.message}`);
   }
 });
